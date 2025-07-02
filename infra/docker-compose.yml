@@ -1,0 +1,201 @@
+version: "3.9"  # always specify version
+
+services:
+  auth-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_AUTH}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_AUTH}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_AUTH}
+    ports:
+      - "${MONGO_PORT_AUTH}:27017"
+    volumes:
+      - auth-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  ticket-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_TICKET}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_TICKET}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_TICKET}
+    ports:
+      - "${MONGO_PORT_TICKET}:27017"
+    volumes:
+      - ticket-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  blocker-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_BLOCKER}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_BLOCKER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_BLOCKER}
+    ports:
+      - "${MONGO_PORT_BLOCKER}:27017"
+    volumes:
+      - blocker-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  notification-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_NOTIFICATION}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_NOTIFICATION}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_NOTIFICATION}
+    ports:
+      - "${MONGO_PORT_NOTIFICATION}:27017"
+    volumes:
+      - notification-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  reporting-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_REPORTING}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_REPORTING}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_REPORTING}
+    ports:
+      - "${MONGO_PORT_REPORTING}:27017"
+    volumes:
+      - reporting-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  client-mongodb:
+    image: mongo:8.0.11
+    container_name: ${MONGO_DB_NAME_CLIENT}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER_CLIENT}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD_CLIENT}
+    ports:
+      - "${MONGO_PORT_CLIENT}:27017"
+    volumes:
+      - client-mongo-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  auth-service:
+    build:
+      context: ../auth-service
+    ports:
+      - "${SERVICE_PORT_AUTH}:9000"
+    depends_on:
+      - auth-mongodb
+  ticketing-service:
+      build:
+        context: ../ticketing-service
+      ports:
+        - "${SERVICE_PORT_TICKETING}:9001"
+      depends_on:
+        - ticket-mongodb
+  notification-service:
+      build:
+        context: ../notification-service
+      ports:
+        - "${SERVICE_PORT_NOTIFICATION}:9002"
+      depends_on:
+        - notification-mongodb
+  blocker-service:
+      build:
+        context: ../blocker-service
+      ports:
+        - "${SERVICE_PORT_BLOCKER}:9003"
+  reporting-service:
+      build:
+        context: ../reporting-service
+      ports:
+        - "${SERVICE_PORT_REPORTING}:9004"
+  client-service:
+      build:
+        context: ../client-management-service
+      ports:
+        - "${SERVICE_PORT_CLIENT}:9005"
+  mysql:
+    image: mysql
+    container_name: ${MYSQL_DB}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS} 
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - mysql-data:/data/db
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ${RABBITMQ_NAME}
+    restart: always
+    ports:
+      - "${RABBITMQ_PORT_SSL}:5672"
+      - "${RABBITMQ_PORT_PANEL}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - ticket-system-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    
+  netshoot:
+    image: nicolaka/netshoot
+    container_name: netshoot
+    command: sleep infinity
+    networks:
+      - ticket-system-network
+
+volumes:
+  auth-mongo-data:
+  ticket-mongo-data:
+  blocker-mongo-data:
+  notification-mongo-data:
+  reporting-mongo-data:
+  client-mongo-data:
+  mysql-data:
+  rabbitmq-data:
+networks:
+  ticket-system-network:
+    driver: bridge
