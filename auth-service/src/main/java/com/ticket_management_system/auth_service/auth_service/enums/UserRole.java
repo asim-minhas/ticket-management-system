@@ -1,4 +1,4 @@
-package enums;
+package com.ticket_management_system.auth_service.auth_service.enums;
 
 public enum UserRole {
     ROLE_ADMIN,

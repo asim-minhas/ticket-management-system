@@ -1,7 +1,7 @@
-package entities;
+package com.ticket_management_system.auth_service.auth_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import enums.UserRole;
+import com.ticket_management_system.auth_service.auth_service.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
