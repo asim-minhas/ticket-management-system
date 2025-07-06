@@ -1,0 +1,13 @@
+server:
+  port: 9000
+
+#Database configuration
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: 'auth_db'
+
+
