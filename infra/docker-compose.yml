@@ -117,6 +117,13 @@ services:
       - "${SERVICE_PORT_AUTH}:9000"
     depends_on:
       - auth-mongodb
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "JWT_SECRET=${JWT_SECRET}"
+      - "MONGO_PORT_AUTH=${MONGO_PORT_AUTH}"
+      - "MONGO_DB_NAME_AUTH=${MONGO_DB_NAME_AUTH}"
+    networks:
+      - ticket-system-network
   ticketing-service:
       build:
         context: ../ticketing-service
@@ -124,6 +131,8 @@ services:
         - "${SERVICE_PORT_TICKETING}:9001"
       depends_on:
         - ticket-mongodb
+      networks:
+        - ticket-system-network
   notification-service:
       build:
         context: ../notification-service
@@ -131,21 +140,29 @@ services:
         - "${SERVICE_PORT_NOTIFICATION}:9002"
       depends_on:
         - notification-mongodb
+      networks:
+        - ticket-system-network
   blocker-service:
       build:
         context: ../blocker-service
       ports:
         - "${SERVICE_PORT_BLOCKER}:9003"
+      networks:
+        - ticket-system-network
   reporting-service:
       build:
         context: ../reporting-service
       ports:
         - "${SERVICE_PORT_REPORTING}:9004"
+      networks:
+        - ticket-system-network
   client-service:
       build:
         context: ../client-management-service
       ports:
         - "${SERVICE_PORT_CLIENT}:9005"
+      networks:
+        - ticket-system-network
   mysql:
     image: mysql
     container_name: ${MYSQL_DB}

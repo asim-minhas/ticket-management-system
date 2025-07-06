@@ -6,13 +6,8 @@ server:
 spring:
   data:
     mongodb:
-      host: auth_db
+      host: localhost
       port: 27017
-      database: auth_db
+      database: 'auth_db'
 
-#JWT configuration
-
-jwt:
-  secret: rx3Uq+IbfJGh1iwRex6PNmOmNl2w3B7dbSt2bMdHOAqUdSSMSmc5V1FPVKkaMYyU5GZ0qH8PUsgF5rhuWqqt2w==
-  expiration: 86400000
 

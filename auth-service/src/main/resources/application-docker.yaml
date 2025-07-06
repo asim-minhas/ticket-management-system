@@ -1,3 +1,17 @@
+server:
+  port: 9000
+
+#Database configuration
+
 spring:
-  application:
-    name: 'auth-service'
+  data:
+    mongodb:
+      host: auth_db
+      port: ${MONGO_PORT_AUTH}
+      database: ${MONGO_DB_NAME_AUTH}
+#JWT configuration
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
