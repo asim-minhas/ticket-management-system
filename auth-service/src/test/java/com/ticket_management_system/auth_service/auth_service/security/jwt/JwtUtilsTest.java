@@ -1,6 +1,5 @@
 package com.ticket_management_system.auth_service.auth_service.security.jwt;
 
-import com.ticket_management_system.auth_service.auth_service.security.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +22,14 @@ class JwtUtilsTest {
 
     @Test
     void testGenerateAndValidateToken() {
-        String token = jwtUtils.genrateJwtToken("testuser");
+        String token = jwtUtils.generateJwtToken("testuser");
         assertNotNull(token);
         assertTrue(jwtUtils.validateJwtToken(token));
     }
 
     @Test
     void testGetUsernameFromToken() {
-        String token = jwtUtils.genrateJwtToken("testuser");
+        String token = jwtUtils.generateJwtToken("testuser");
         String username = jwtUtils.getUserNameFromJwtToken(token);
         assertEquals("testuser", username);
     }
