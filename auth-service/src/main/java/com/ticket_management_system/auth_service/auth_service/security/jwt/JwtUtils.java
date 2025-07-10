@@ -51,7 +51,7 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
 
-    public String genrateJwtToken(String subject){
+    public String generateJwtToken(String subject){
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(java.util.Date.from(java.time.Instant.now()))
