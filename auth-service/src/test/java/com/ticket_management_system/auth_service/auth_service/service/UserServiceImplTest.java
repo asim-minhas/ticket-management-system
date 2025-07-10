@@ -19,7 +19,7 @@ class UserServiceImplTest {
 
     @Test
     void findUserByEmail_found_returnsUser() {
-        User user = new User("id", "John Doe", "john@example.com", "password", UserRole.ROLE_ADMIN, null, null, true, true, true, true);
+        User user = new User("id", "John Doe", "john@example.com", "password", "",UserRole.ADMIN, null, null, true, true, true, true);
         when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
 
         var result = userService.findUserByEmail("john@example.com");

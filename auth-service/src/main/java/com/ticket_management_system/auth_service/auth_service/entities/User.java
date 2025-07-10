@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -36,15 +37,17 @@ public class User{
     @JsonIgnore
     private String password;
 
+    private String companyName;
+
     private UserRole role;
 
     @CreatedDate
     @Field("created_at")
-    LocalDate createdAt;
+    LocalDateTime createdAt;
 
     @LastModifiedDate
     @Field("modified_at")
-    LocalDate modifiedAt;
+    LocalDateTime modifiedAt;
 
     @Field("account_non_locked")
     private boolean accountNonLocked = true;
