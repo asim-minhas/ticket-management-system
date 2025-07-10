@@ -4,27 +4,28 @@ import com.ticket_management_system.auth_service.auth_service.entities.User;
 import com.ticket_management_system.auth_service.auth_service.enums.UserRole;
 import com.ticket_management_system.auth_service.auth_service.repositories.UserRepository;
 import com.ticket_management_system.auth_service.auth_service.security.jwt.JwtUtils;
+import com.ticket_management_system.auth_service.auth_service.security.request.AdminCreateUserRequest;
 import com.ticket_management_system.auth_service.auth_service.security.request.LoginRequest;
 import com.ticket_management_system.auth_service.auth_service.security.request.SignUpRequest;
 import com.ticket_management_system.auth_service.auth_service.security.response.LoginResponse;
 import com.ticket_management_system.auth_service.auth_service.security.response.SignUpResponse;
+import com.ticket_management_system.auth_service.auth_service.security.response.UserResponse;
 import com.ticket_management_system.auth_service.auth_service.security.service.UserDetailsImpl;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -114,4 +115,49 @@ public class AuthController {
                     .body(Collections.singletonMap("error", "Something went wrong"));
         }
     }
+
+    @PostMapping("/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createInternalUser(
+            @Valid @RequestBody AdminCreateUserRequest req) {
+
+        log.info("GLOBAL_ADMIN {} creating new user '{}'",
+                SecurityContextHolder.getContext().getAuthentication().getName(),
+                req.email());
+
+        if (userRepository.existsByEmail(req.email())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Collections.singletonMap("error", "Email already registered"));
+        }
+
+        User user = User.builder()
+                .email(req.email())
+                .password(passwordEncoder.encode(req.password()))
+                .name(req.name())
+                .companyName("YOUR-CORP")           // internal tenant
+                .role(req.role())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new UserResponse(user.getId(), user.getEmail(), user.getRole()));
+    }
+    @GetMapping("/admin/userinfo")
+    public ResponseEntity<LoginResponse> userInfo(@AuthenticationPrincipal UserDetailsImpl principal) {
+        // principal is injected by Spring Security once the JWT was validated
+        return ResponseEntity.ok(
+                new LoginResponse(
+                        /* jwt = */ null,          // not sending token back
+                        principal.getUsername(),
+                        principal.getAuthorities()
+                                .stream()
+                                .findFirst()
+                                .map(a -> UserRole.valueOf(a.getAuthority()))
+                                .orElse(null)
+                )
+        );
+    }
+
 }
