@@ -21,13 +21,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -145,6 +143,21 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new UserResponse(user.getId(), user.getEmail(), user.getRole()));
+    }
+    @GetMapping("/admin/userinfo")
+    public ResponseEntity<LoginResponse> userInfo(@AuthenticationPrincipal UserDetailsImpl principal) {
+        // principal is injected by Spring Security once the JWT was validated
+        return ResponseEntity.ok(
+                new LoginResponse(
+                        /* jwt = */ null,          // not sending token back
+                        principal.getUsername(),
+                        principal.getAuthorities()
+                                .stream()
+                                .findFirst()
+                                .map(a -> UserRole.valueOf(a.getAuthority()))
+                                .orElse(null)
+                )
+        );
     }
 
 }
