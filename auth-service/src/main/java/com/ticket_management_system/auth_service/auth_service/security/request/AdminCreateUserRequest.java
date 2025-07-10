@@ -1,13 +1,26 @@
 package com.ticket_management_system.auth_service.auth_service.security.request;
 
+
 import com.ticket_management_system.auth_service.auth_service.enums.UserRole;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record AdminCreateUserRequest(
-        @Email String email,
-        @Size(min = 8)       String password,
-        @NotBlank String name,
-        @NotNull UserRole role) { }
+        @NotBlank
+        @Email
+        String email,
+
+        @NotBlank
+        @Size(min = 8, max = 128)
+        String password,
+
+        @NotBlank
+        @Size(max = 80)
+        String name,
+
+        @NotNull
+        UserRole role,
+
+        @NotBlank
+        @Size(max = 120)
+        String companyName
+) {}

@@ -19,6 +19,6 @@ class UserDetailsImplTest {
         assertEquals("john@example.com", userDetails.getUsername());
         assertEquals("password", userDetails.getPassword());
         assertEquals(1, userDetails.getAuthorities().size());
-        assertTrue(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        assertTrue(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")));
     }
 }
