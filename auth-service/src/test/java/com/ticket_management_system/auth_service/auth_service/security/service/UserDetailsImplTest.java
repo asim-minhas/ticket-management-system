@@ -11,7 +11,7 @@ class UserDetailsImplTest {
 
     @Test
     void createUser_returnsCorrectUserDetailsImpl() {
-        User user = new User("id", "John", "john@example.com", "password", UserRole.ROLE_ADMIN, null, null, true, true, true, true);
+        User user = new User("id", "John", "john@example.com", "password","", UserRole.ADMIN, null, null, true, true, true, true);
 
         UserDetailsImpl userDetails = UserDetailsImpl.createUser(user);
 

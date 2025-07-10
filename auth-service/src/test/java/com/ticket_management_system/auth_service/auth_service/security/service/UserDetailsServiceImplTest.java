@@ -18,7 +18,7 @@ class UserDetailsServiceImplTest {
 
     @Test
     void loadUserByUsername_userFound_returnsUserDetails() {
-        User user = new User("id", "John Doe", "john@example.com", "password", UserRole.ROLE_ADMIN, null, null, true, true, true, true);
+        User user = new User("id", "John Doe", "john@example.com", "password","" ,UserRole.ADMIN, null, null, true, true, true, true);
         when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
 
         var result = userDetailsService.loadUserByUsername("john@example.com");
