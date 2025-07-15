@@ -1,8 +1,10 @@
-package com.ticket_management_system.auth_service.auth_service.security.service;
+package com.ticket_management_system.auth_service.auth_service.security;
 
+import com.ticket_management_system.auth_service.auth_service.enums.UserRole;
 import com.ticket_management_system.auth_service.auth_service.security.jwt.JwtAuthEntryPoint;
 import com.ticket_management_system.auth_service.auth_service.security.jwt.JwtFilter;
 import com.ticket_management_system.auth_service.auth_service.security.jwt.JwtUtils;
+import com.ticket_management_system.auth_service.auth_service.security.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +14,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -50,13 +50,13 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
             .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((requests)
                 -> requests
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/auth/public/**").permitAll()
                 .anyRequest().authenticated()
-             )
-            .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+             );
         return http.build();
     }
     @Bean

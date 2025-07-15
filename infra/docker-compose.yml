@@ -120,6 +120,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "JWT_SECRET=${JWT_SECRET}"
+      - "JWT_EXPIRATION=${JWT_EXPIRATION}"
       - "MONGO_PORT_AUTH=${MONGO_PORT_AUTH}"
       - "MONGO_DB_NAME_AUTH=${MONGO_DB_NAME_AUTH}"
     networks:
