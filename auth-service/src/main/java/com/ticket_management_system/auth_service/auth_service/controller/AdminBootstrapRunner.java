@@ -31,7 +31,7 @@ public class AdminBootstrapRunner implements CommandLineRunner {
                 .password(passwordEncoder.encode("StartupP@ss!"))
                 .name("Platform Admin")
                 .companyName("YOUR-CORP")
-                .role(UserRole.ADMIN)
+                .role(UserRole.ROLE_ADMIN)
                 .createdAt(LocalDateTime.now())
                 .build();
 

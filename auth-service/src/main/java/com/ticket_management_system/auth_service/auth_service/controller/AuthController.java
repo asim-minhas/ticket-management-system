@@ -13,14 +13,12 @@ import com.ticket_management_system.auth_service.auth_service.security.response.
 import com.ticket_management_system.auth_service.auth_service.security.response.UserResponse;
 import com.ticket_management_system.auth_service.auth_service.security.service.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -87,7 +85,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(signUpRequest.password()));
         user.setName(signUpRequest.name());
         user.setCompanyName(signUpRequest.companyName());
-        user.setRole(UserRole.CLIENT_ADMIN);
+        user.setRole(UserRole.ROLE_CLIENT_ADMIN);
         user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
@@ -95,7 +93,7 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(user.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new SignUpResponse(jwt, user.getEmail(), UserRole.CLIENT_ADMIN.name()));
+                .body(new SignUpResponse(jwt, user.getEmail(), UserRole.ROLE_CLIENT_ADMIN.name()));
     }
 
     @PostMapping("/admin/users")

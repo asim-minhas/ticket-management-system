@@ -11,7 +11,7 @@ class UserDetailsImplTest {
 
     @Test
     void createUser_returnsCorrectUserDetailsImpl() {
-        User user = new User("id", "John", "john@example.com", "password","", UserRole.ADMIN, null, null, true, true, true, true);
+        User user = new User("id", "John", "john@example.com", "password","", UserRole.ROLE_ADMIN, null, null, true, true, true, true);
 
         UserDetailsImpl userDetails = UserDetailsImpl.createUser(user);
 
@@ -19,6 +19,6 @@ class UserDetailsImplTest {
         assertEquals("john@example.com", userDetails.getUsername());
         assertEquals("password", userDetails.getPassword());
         assertEquals(1, userDetails.getAuthorities().size());
-        assertTrue(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")));
+        assertTrue(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(UserRole.ROLE_ADMIN.name())));
     }
 }
