@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/ticketing-service.jar app.jar
 
 # Expose application port (matches Compose port mapping)
-EXPOSE 9002
+EXPOSE 9001
 
 # Run JAR on container start
 ENTRYPOINT ["java", "-jar", "app.jar"]

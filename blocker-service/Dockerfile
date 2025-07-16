@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/blocker-service.jar app.jar
 
 # Expose application port (matches Compose port mapping)
-EXPOSE 9001
+EXPOSE 9003
 
 # Run JAR on container start
 ENTRYPOINT ["java", "-jar", "app.jar"]

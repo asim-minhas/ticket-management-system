@@ -132,6 +132,10 @@ services:
         - "${SERVICE_PORT_TICKETING}:9001"
       depends_on:
         - ticket-mongodb
+      environment:
+        - "SPRING_PROFILES_ACTIVE=test"
+        - "MONGO_PORT_TICKET=${MONGO_PORT_TICKET}"
+        - "MONGO_DB_NAME_TICKET=${MONGO_DB_NAME_TICKET}"
       networks:
         - ticket-system-network
   notification-service:
