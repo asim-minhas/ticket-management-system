@@ -38,9 +38,9 @@ public class Ticket {
     private TicketType ticketType;
 
     @NotNull
-    private TicketPriority priority= TicketPriority.MEDIUM;
+    private TicketPriority priority;
     @NotNull
-    private TicketStatus status = TicketStatus.NEW;
+    private TicketStatus status;
 
     private String assigneeId;
     private String nextActionOwnerId;
@@ -53,5 +53,5 @@ public class Ticket {
     private Instant updatedAt;
 
     private Instant dueAt;
-    private Boolean breached=false;
+    private Boolean breached;
 }
