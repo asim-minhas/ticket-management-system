@@ -133,7 +133,7 @@ services:
       depends_on:
         - ticket-mongodb
       environment:
-        - "SPRING_PROFILES_ACTIVE=test"
+        - "SPRING_PROFILES_ACTIVE=docker"
         - "MONGO_PORT_TICKET=${MONGO_PORT_TICKET}"
         - "MONGO_DB_NAME_TICKET=${MONGO_DB_NAME_TICKET}"
       networks:
