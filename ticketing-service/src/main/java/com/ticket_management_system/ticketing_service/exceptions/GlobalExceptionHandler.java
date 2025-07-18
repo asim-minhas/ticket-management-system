@@ -29,7 +29,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             ConstraintViolationException.class,
-            MethodArgumentNotValidException.class
+            MethodArgumentNotValidException.class,
+            IllegalTransitionException.class
+
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidation(Exception ex) {

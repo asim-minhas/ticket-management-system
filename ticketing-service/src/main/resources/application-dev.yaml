@@ -17,3 +17,6 @@ logging:
   level:
     org.springframework.security: DEBUG
     com.ticket_management_system.auth_service.auth_service.security.jwt: DEBUG
+    org.springframework.aop: DEBUG
+    org.aspectj: TRACE
+
