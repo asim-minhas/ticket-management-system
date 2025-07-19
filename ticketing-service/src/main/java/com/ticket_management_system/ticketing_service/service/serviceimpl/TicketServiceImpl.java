@@ -13,6 +13,7 @@ import com.ticket_management_system.ticketing_service.repositories.TicketHistory
 import com.ticket_management_system.ticketing_service.repositories.TicketRepository;
 import com.ticket_management_system.ticketing_service.sequence.TicketKeyGenerator;
 import com.ticket_management_system.ticketing_service.service.TicketService;
+import io.micrometer.core.instrument.Counter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -35,14 +36,16 @@ public class TicketServiceImpl implements TicketService {
     private final TicketHistoryRepository historyRepo;
     private final TicketKeyGenerator keyGenerator;
     private final TicketKeyGenerator ticketKeyGenerator;
+    private final Counter ticketsCreated;
 
 
-    public TicketServiceImpl(TicketRepository ticketRepository, MongoTemplate mongo, TicketHistoryRepository historyRepo, TicketKeyGenerator keyGenerator, TicketKeyGenerator ticketKeyGenerator) {
+    public TicketServiceImpl(TicketRepository ticketRepository, MongoTemplate mongo, TicketHistoryRepository historyRepo, TicketKeyGenerator keyGenerator, TicketKeyGenerator ticketKeyGenerator, Counter ticketsCreated) {
         this.ticketRepository = ticketRepository;
         this.mongo = mongo;
         this.historyRepo = historyRepo;
         this.keyGenerator = keyGenerator;
         this.ticketKeyGenerator = ticketKeyGenerator;
+        this.ticketsCreated = ticketsCreated;
     }
 
     @Override

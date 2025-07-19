@@ -23,3 +23,21 @@ logging:
     org.springframework.security: DEBUG
     com.ticket_management_system.auth_service.auth_service.security.jwt: DEBUG
 
+management:
+  server:
+    port: 9050          # ← run actuators on a side-port, keeps metrics off the main path
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus   # expose only what Prometheus (and you) need
+  endpoint:
+    health:
+      show-details: "when_authorized"      # "always" if you want full health JSON
+  metrics:
+    tags:                                  # add high-cardinality tags here if desired
+      application: ticketing-service
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
