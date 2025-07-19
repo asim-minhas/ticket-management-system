@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 
-public record TicketResponse(  String id,
+public record TicketResponse(  String ticketId,
                                String title,
                                String description,
                                TicketType ticketType,
@@ -20,5 +20,5 @@ public record TicketResponse(  String id,
                                Instant updatedAt,
                                Instant dueAt,
                                boolean breached,
-                               long slaRemainingMinutes) {
+                               long slaRemainingDays) {
 }

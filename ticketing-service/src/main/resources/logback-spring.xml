@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- pull Spring property into Logback -->
+    <springProperty scope="context" name="springAppName"
+                    source="spring.application.name"
+                    defaultValue="ticketing-service"/>
+
+    <!-- JSON logs to stdout -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- optional: shorten field names, add static labels -->
+            <fieldNames>
+                <timestamp>ts</timestamp>
+                <level>lvl</level>
+                <thread>thr</thread>
+                <logger>log</logger>
+                <message>msg</message>
+            </fieldNames>
+            <customFields>{"app":"${springAppName}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

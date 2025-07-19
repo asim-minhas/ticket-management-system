@@ -25,6 +25,9 @@ import java.time.LocalDateTime;
 public class Ticket {
     @Id
     private String id;
+
+    @NotNull
+    private String ticketId;
     @NotBlank
     private String tenantId;
     @NotBlank
