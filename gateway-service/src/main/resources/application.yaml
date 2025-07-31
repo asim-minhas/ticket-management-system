@@ -1,0 +1,23 @@
+server:
+  port: 9006            # gateway’s own port
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service      # ❷
+              uri: http://auth-service:9000
+              predicates:
+                - Path=/auth/**
+
+            - id: ticket-service
+              uri: http://ticket-service:9001
+              predicates:
+                - Path=/tickets/**
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials

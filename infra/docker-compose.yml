@@ -168,6 +168,14 @@ services:
         - "${SERVICE_PORT_CLIENT}:9005"
       networks:
         - ticket-system-network
+
+  gateway-service:
+    build:
+      context: ../gateway-service
+    ports:
+      - "${SERVICE_PORT_GATEWAY}:9006"
+    networks:
+      - ticket-system-network
   mysql:
     image: mysql
     container_name: ${MYSQL_DB}
