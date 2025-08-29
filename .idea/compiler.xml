@@ -3,18 +3,24 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for ticketing-service" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gateway-service" />
+      </profile>
+      <profile name="Annotation profile for ticket-system-management" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="ticketing-service" />
         <module name="reporting-service" />
+        <module name="ticketing-service" />
         <module name="auth-service" />
-        <module name="notification-service" />
         <module name="blocker-service" />
+        <module name="notification-service" />
         <module name="client-management-service" />
       </profile>
     </annotationProcessing>
@@ -28,6 +34,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="blocker-service" options="-parameters" />
       <module name="client-management-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="reporting-service" options="-parameters" />
       <module name="ticketing-service" options="-parameters" />
